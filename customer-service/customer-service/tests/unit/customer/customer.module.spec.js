@@ -12,5 +12,9 @@ describe('CustomerModule', function(){
         it('should confirm CustomerModule function returns an object', function(){
             expect(CustomerModule()).to.be.a('object');
         });
+
+        it('should confirm CustomerController function exist', function(){
+            expect(CustomerModule().CustomerController).to.be.a('function');
+        });
     });
 });
