@@ -16,5 +16,9 @@ describe('CustomerModule', function(){
         it('should confirm CustomerController function exist', function(){
             expect(CustomerModule().CustomerController).to.be.a('function');
         });
+
+        it('should confirm CustomerMiddleware object exist', function(){
+            expect(CustomerModule().CustomerMiddleware).to.be.a('object');
+        });
     });
 });

@@ -5,7 +5,8 @@
 
     function init(){
         return {
-            CustomerController: require('./customer.controller')
+            CustomerController: require('./customer.controller'),
+            CustomerMiddleware: require('./customer.middleware')
         }
     }
 })();
