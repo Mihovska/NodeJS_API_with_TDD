@@ -24,5 +24,9 @@ describe('CustomerModule', function(){
         it('should confirm CustomerService object exist', function(){
             expect(CustomerModule().CustomerService).to.be.a('object');
         });
+
+        it('should confirm CustomerModel function exist', function(){
+            expect(CustomerModule().CustomerModel).to.be.a('function');
+        });
     });
 });
