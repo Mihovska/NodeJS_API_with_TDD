@@ -30,4 +30,13 @@ describe('CustomerService', function(){
 
         return mongoose.connection.close();
     });
+
+    describe('createCustomer', function(){
+        var newCustomer, expectedCreatedCustomer, expectedError;
+
+        it('should successfully create new customer', function(){
+            newCustomer = CustomerFixture.newCustomer;
+            expectedCreatedCustomer = CustomerFixture.createdCustomer;
+        });
+    });
 });
