@@ -37,6 +37,34 @@ describe('CustomerService', function(){
         it('should successfully create new customer', function(){
             newCustomer = CustomerFixture.newCustomer;
             expectedCreatedCustomer = CustomerFixture.createdCustomer;
+
+            CustomerModelMock.expects('create')
+                .withArgs(newCustomer)
+                .resolves(expectedCreatedCustomer)
+
+                return CustomerService.createCustomer(newCustomer)
+                .then(function(data){
+                    CustomerModelMock.verify();
+
+                    expect(data).to.deep.equal(expectedCreatedCustomer);
+                });
+
+        });
+
+        it('should throw error while creating customer', function(){
+            expectedError = ErrorFixture.unknownError;
+            newCustomer = CustomerFixture.newCustomer;
+
+            CustomerModelMock.expects('create')
+            .withArgs(newCustomer)
+            .rejects(expectedError);
+
+            return CustomerService.createCustomer(newCustomer)
+            .catch(function(error){
+                CustomerModelMock.verify();
+
+                expect(error).to.deep.equal(expectedError);
+            });
         });
     });
 });
