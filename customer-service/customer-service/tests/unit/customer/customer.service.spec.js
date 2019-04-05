@@ -3,6 +3,7 @@
 var chai = require('chai');
 var expect = chai.expect;
 var sinon = require('sinon');
+require('sinon-mongoose');
 var mongoose = require('mongoose');
 
 var CustomerModule = require('../../../modules/customer/customer.module')();
@@ -65,6 +66,39 @@ describe('CustomerService', function(){
 
                 expect(error).to.deep.equal(expectedError);
             });
+        });
+    });
+
+    describe('fetchCustomer', function(){
+        var expectedCustomers, expectedError;
+        it('should successfully fetch all customers', function(){
+            expectedCustomers = CustomerFixture.customers;
+
+            CustomerModelMock.expects('find')
+                .withArgs({})
+                .chain('exec')
+                .resolves(expectedCustomers);
+            return CustomerService.fetchCustomers()
+                .then(function(data){
+                    CustomerModelMock.verify();
+                    expect(data).to.deep.equal(expectedCustomers);
+                });
+        });
+
+        it('should throw error while fetching all customers', function(){
+            expectedError = ErrorFixture.unknownError;
+
+            CustomerModelMock.expects('find')
+                .withArgs({})
+                .chain('exec')
+                .rejects(expectedError);
+
+                return CustomerService.fetchCustomers()
+                    .catch(function(error){
+                        CustomerModelMock.verify();
+
+                        expect(error).to.deep.equal(expectedError);
+                    });
         });
     });
 });
