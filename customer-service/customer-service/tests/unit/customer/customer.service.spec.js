@@ -101,4 +101,41 @@ describe('CustomerService', function(){
                     });
         });
     });
+
+    describe('fetchCustomerById', function(){
+        var expectedFetchedCustomer, customerId, expectedError;
+
+        it('should successfully fetch the customer by id', function(){
+            expectedFetchedCustomer = CustomerFixture.createdCustomer;
+            customerId = expectedFetchedCustomer._id;
+
+            CustomerModelMock.expects('findById')
+                .withArgs(customerId)
+                .chain('exec')
+                .resolves(expectedFetchedCustomer);
+
+            return CustomerService.fetchCustomerById(customerId)
+                .then(function(data){
+                    CustomerModelMock.verify();
+
+                    expect(data).to.deep.equal(expectedFetchedCustomer);
+                });
+        });
+
+        it('should throw error while fetching customer by id', function(){
+            customerId = CustomerFixture.createdCustomer._id;
+            expectedError = ErrorFixture.unknownError;
+
+            CustomerModelMock.expects('findById')
+                .withArgs(customerId)
+                .chain('exec')
+                .rejects(expectedError);
+            return CustomerService.fetchCustomerById(customerId)
+                .catch(function(error){
+                    CustomerModelMock.verify();
+
+                    expect(error).to.deep.equal(expectedError);
+                });
+        });
+    });
 });

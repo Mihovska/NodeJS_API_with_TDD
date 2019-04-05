@@ -3,7 +3,8 @@
 
     module.exports = {
         createCustomer: createCustomer,
-        fetchCustomers: fetchCustomers
+        fetchCustomers: fetchCustomers,
+        fetchCustomerById: fetchCustomerById
     };
 
     function fetchCustomers(){
@@ -14,6 +15,11 @@
     var CustomerModel = require('./customer.module')().CustomerModel;
     function createCustomer(customer){
         return CustomerModel.create(customer);
+    }
+
+    function fetchCustomerById(customerId){
+        return CustomerModel.findById(customerId)
+        .exec();
     }
 
 })();
