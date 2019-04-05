@@ -7,6 +7,7 @@ var logger = require('morgan');
 var app = express();
 
 var MongoDBUtil = require('./modules/mongodb/mongodb.module').MongoDBUtil;
+var CustomerController = require('./modules/customer/customer.module')().CustomerController;
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -14,6 +15,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 MongoDBUtil.init();
+
+app.use('/customers', CustomerController);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
