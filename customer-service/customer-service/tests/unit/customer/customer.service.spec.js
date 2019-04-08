@@ -138,4 +138,24 @@ describe('CustomerService', function(){
                 });
         });
     });
+
+    describe('updateCustomer', function(){
+        var existingCustomer, expectedModifiedCustomer, expectedError;
+
+        it('should successfully update Customer', function(){
+            expectedModifiedCustomer = CustomerFixture.modifiedCustomer;
+            existingCustomer = CustomerFixture.createdCustomer;
+
+            CustomerModelMock.expects('findByIdAndUpdate')
+                .withArgs(existingCustomer._id, existingCustomer, {new: true})
+                .chain('exec')
+                .resolves(expectedModifiedCustomer);
+            return CustomerService.updateCustomer(existingCustomer._id, existingCustomer)
+                .then(function(data){
+                    CustomerModelMock.verify();
+
+                    expect(data).to.deep.equal(expectedModifiedCustomer);
+                })
+        });
+    });
 });
