@@ -152,4 +152,49 @@ describe('CustomerMiddleware', function(){
             });
         });
     });
+
+    describe('modifyCustomer', function(){
+        var updateCustomer, updateCustomerPromise, expectedModifiedCustomer, expectedError;
+
+        beforeEach(function(){
+            updateCustomer = sinon.stub(CustomerService, 'updateCustomer');
+            req.body = CustomerFixture.modifiedCustomer;
+            req.params.customerId = req.body._id;
+        });
+
+        afterEach(function(){
+            updateCustomer.restore();
+        });
+
+        it('should successfully modify the customer details', function(){
+            expectedModifiedCustomer = CustomerFixture.modifiedCustomer;
+            updateCustomerPromise = Promise.resolve(expectedModifiedCustomer);
+            updateCustomer.withArgs(req.params.customerId, req.body).returns(updateCustomerPromise);
+
+            CustomerMiddleware.modifyCustomer(req, res, next);
+
+            sinon.assert.callCount(updateCustomer, 1);
+
+            return updateCustomerPromise.then(function(){
+                expect(req.response).to.be.a('object');
+                expect(req.response).to.deep.equal(expectedModifiedCustomer);
+                sinon.assert.callCount(next, 1);
+            });
+        });
+
+        it('should throw error while modifying customer by Id', function(){
+            expectedError = ErrorFixture.unknownError;
+            updateCustomerPromise = Promise.reject(expectedError);
+            updateCustomer.withArgs(req.params.customerId, req.body).returns(updateCustomerPromise);
+
+            CustomerMiddleware.modifyCustomer(req, res, next);
+
+            sinon.assert.callCount(updateCustomer, 1);
+
+            return updateCustomerPromise.catch(function(error){
+                expect(error).to.be.a('object');
+                expect(error).to.deep.equal(expectedError);
+            });
+        });
+    });
 });

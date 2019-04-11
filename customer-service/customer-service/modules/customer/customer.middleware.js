@@ -4,7 +4,8 @@
     module.exports = {
         addCustomer: addCustomer,
         getCustomers: getCustomers,
-        getCustomerById: getCustomerById
+        getCustomerById: getCustomerById,
+        modifyCustomer: modifyCustomer
     };
 
     var CustomerService = require('./customer.module')().CustomerService;
@@ -50,6 +51,21 @@
         }
 
         function failure(err){
+            next(err);
+        }
+    }
+
+    function modifyCustomer(req, res, next){
+        CustomerService.updateCustomer(req.params.customerId, req.body)
+            .then(success)
+            .catch(error);
+
+        function success(data){
+            req.response = data;
+            next();
+        }
+
+        function error(err){
             next(err);
         }
     }
