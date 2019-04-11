@@ -16,5 +16,9 @@
     router.get('/:customerId', CustomerMiddleware.getCustomerById, function(req, res){
         res.status(200).json(req.response);
     });
+
+    router.put('/:customerId', CustomerMiddleware.modifyCustomer, function(req, res){
+        res.status(200).json(req.response);
+    });
     module.exports = router;
 })();
