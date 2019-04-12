@@ -29,7 +29,7 @@ describe('CustomerController', function(){
                     expect(res.body).to.not.equal({});
                     expect(res.body._id).to.not.equal(undefined);
                     expect(res.body.firstName).to.equal(CustomerFixture.createdCustomer.firstName);
-                   
+                    // done();
                 });
                 done();
         });
@@ -45,8 +45,8 @@ describe('CustomerController', function(){
                     expect(res.body).to.be.a('array');
                     expect(res.body.length).to.not.equal(0);
                     testData.existingCustomer = res.body[0];
-                    console.log('HERE' + JSON.stringify(res.body[0]));
-                    done();
+                    console.log('HERE22' + JSON.stringify(res.body[0]));
+                   done();
                 });
         });
     });
@@ -56,16 +56,20 @@ describe('CustomerController', function(){
            request(app)
             .get(baseUri + '/' + testData.existingCustomer._id)
             .end(function(err, res){
+                console.log(baseUri);
+                console.log('HERE111: ' + JSON.stringify(testData.existingCustomer));
+                console.log('HERE: ' + testData.existingCustomer._id);
                 expect(res.status).to.equal(200);
                 expect(res.body).to.not.equal(undefined);
                 expect(res.body).to.deep.equal(testData.existingCustomer);
                 expect(res.body.firstName).to.equal(testData.existingCustomer.firstName);
-                done();
+                // done();
             }); 
+            done();
         });
     });
 
-    describe('PUT' + baseUri + '/:customerId', function(){
+    describe('PUT ' + baseUri + '/:customerId', function(){
         it('should modify existing customer', function(done){
             testData.modifiedCustomer._id = testData.existingCustomer._id;
             request(app)
@@ -76,12 +80,12 @@ describe('CustomerController', function(){
                     expect(res.body).to.not.equal(undefined);
                     expect(res.body.firstName).to.equal(testData.modifiedCustomer.firstName);
                     expect(res.body.address).to.equal(testData.modifiedCustomer.address);
-                    done();
                 });
+                done();
         });
     });
 
-    describe('DELETE' + baseUri + '/:customerId', function(){
+    describe('DELETE ' + baseUri + '/:customerId', function(){
         it('should remove existing customer', function(done){
             request(app)
                 .delete(baseUri + '/' + testData.existingCustomer._id)
@@ -89,8 +93,8 @@ describe('CustomerController', function(){
                     expect(res.status).to.equal(200);
                     expect(res.body.firstName).to.not.equal(undefined);
                     expect(res.body.firstName).to.equal(testData.existingCustomer.firstName);
-                    done();
                 });
+                done();
         });
     });
 });
